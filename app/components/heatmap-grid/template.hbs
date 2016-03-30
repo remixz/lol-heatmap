@@ -1,0 +1,9 @@
+<table border="1" cellpadding="0" cellspacing="0" style="height:800px;width:800px;border:black;opacity:.2">
+	<tbody>
+    {{#each sizeArray as |_ row|}}
+    <tr>
+      {{#each sizeArray as |_ column|}}<td data-row="{{row}}" data-column="{{column}}" >&nbsp;</td>{{/each}}
+    </tr>
+    {{/each}}
+	</tbody>
+</table>

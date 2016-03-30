@@ -1,0 +1,43 @@
+<div class="route-map">
+  <div class="row row-8">
+    {{match-heatmap events=mappedEvents mapping=isMapping placeWard=(action "placeWard")}}
+  </div>
+  <div class="row row-4">
+    <div class="download">
+      {{#x-file-input action=(action "uploadJson")}}
+        <button> Import heatmap data </button>
+      {{/x-file-input}}
+      <button {{action "downloadJson"}}> Export heatmap data </button>
+    </div>
+    <br />
+    {{ember-selectize
+      multiple=true
+      content=model.identities
+      selection=selectedIdentities
+      placeholder="Choose players..."
+      optionValuePath="content.id"
+      optionLabelPath="content.name"
+      optionGroupPath="content.team.side"
+      plugins="remove_button,optgroup_columns"
+      add-item=(action "updateEvents")
+      remove-item=(action "updateEvents")}}
+
+    {{#if (gt unmappedEvents.length 0)}}
+      <p> Unmapped wards: {{unmappedEvents.length}} </p>
+      <button {{action "toggleMapping"}}> Toggle ward plotting mode </button>
+      {{#if isMapping}}
+        {{event-viewer event=unmappedEvents.[0]}}
+        <p><em> Click on the map where the ward was placed </em></p>
+      {{/if}}
+    {{/if}}
+
+    <div class="player-info">
+      {{#each selectedIdentities as |player|}}
+        <div class="info-box">
+          <img src="http://ddragon.leagueoflegends.com/cdn/6.6.1/img/champion/{{player.champion}}.png">
+          <p>{{player.name}} placed {{player.events.length}} wards.</p>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+@import "normalize.css";
+
+body {
+  width: 1250px;
+  margin: 0 auto;
+}
+
+.match-heatmap {
+  width: 800px;
+  height: 800px;
+  user-select: none;
+}
+
+.match-heatmap img {
+  width: 800px;
+  height: 800px;
+}
+
+.row {
+  float: left;
+}
+
+.row-8 {
+  width: 800px;
+}
+
+.row-4 {
+  width: 400px;
+  margin-left: 25px;
+}
