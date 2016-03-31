@@ -10,18 +10,6 @@ export default Ember.Component.extend({
       container: this.$('.match-heatmap')[0]
     })
     this.set('heatmap', instance)
-
-    this.$('.heatmap-grid td').on('click', e => {
-      let $target = this.$(e.target)
-      let row = $target.data('row') + 1
-      let column = $target.data('column') + 1
-      let width = $target.outerWidth()
-      let height = $target.outerHeight()
-      let x = Math.round(column * width - width/2)
-      let y = Math.round(row * height - height/2)
-
-      this.sendAction('placeWard', { x, y })
-    })
   },
 
   didReceiveAttrs () {
