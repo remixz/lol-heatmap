@@ -17,7 +17,7 @@ export default Ember.Component.extend({
       let x = Math.round(column * width - width/2)
       let y = Math.round(row * height - height/2)
 
-      this.sendAction('placeWard', { x, y })
+      this.attrs.placeWard({ x, y })
     })
   }
 });

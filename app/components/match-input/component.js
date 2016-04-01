@@ -4,7 +4,7 @@ export default Ember.Component.extend({
   match: '',
   actions: {
     submit () {
-      this.sendAction('gotoMap', this.get('match'))
+      this.attrs.gotoMap(this.get('match'))
     }
   }
 });

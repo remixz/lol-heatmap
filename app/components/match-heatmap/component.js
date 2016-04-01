@@ -15,17 +15,29 @@ export default Ember.Component.extend({
     let heatmap = this.get('heatmap')
     let events = this.get('events')
 
-    // resets heatmap, and adds coords
-    // @TODO: figure out way to do in setdata, with value increasing whenever duplicate coords are added
-    heatmap.setData({
-      max: 1,
-      data: []
+    let filtered = []
+    let max = 1
+    events.forEach(ev => {
+      let x = ev.get('x')
+      let y = ev.get('y')
+
+      let dup = filtered.findIndex(ev => ev.x === x && ev.y === y)
+      if (dup > -1) {
+        filtered[dup].value = filtered[dup].value + 1
+        max = Math.max(max, filtered[dup].value)
+      } else {
+        filtered.push({
+          x, y,
+          value: 1,
+          radius: 30
+        })
+      }
     })
-    heatmap.addData(events.map(ev => ({
-      x: ev.get('x'),
-      y: ev.get('y'),
-      value: 1,
-      radius: 30
-    })))
+
+    // resets heatmap, and adds coords
+    heatmap.setData({
+      max,
+      data: filtered
+    })
   }
 });
