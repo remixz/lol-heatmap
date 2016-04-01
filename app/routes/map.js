@@ -8,6 +8,7 @@ export default Ember.Route.extend({
   },
 
   setupController () {
+    this._super(...arguments)
     let match = this.controller.get('match')
     if (match.indexOf('#') === -1) {
       this.controller.set('match', match + window.location.hash)
