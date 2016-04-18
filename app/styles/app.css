@@ -1,5 +1,6 @@
 @import "normalize.css";
 
+
 body {
   width: 1250px;
   margin: 0 auto;
@@ -27,4 +28,23 @@ body {
 .row-4 {
   width: 400px;
   margin-left: 25px;
+}
+
+.heatmap-grid {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.heatmap-table {
+  height: 800px;
+  width: 800px;
+  opacity: 0.2;
+  border: 1px solid #000;
+  border-spacing: 0;
+}
+
+.heatmap-table td {
+  border: 1px solid #000;
 }
