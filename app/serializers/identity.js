@@ -32,8 +32,24 @@ export default DS.Serializer.extend({
       attributes: {
         side: (team.teamId === 100 ? 'Blue' : 'Red'),
         winner: (team.win === 'Win')
+      },
+      relationships: {
+        game: {
+          data: {
+            type: 'game',
+            id: `${payload.platformId}/${payload.gameId}`
+          }
+        }
       }
     }))
+
+    result.included.push({
+      type: 'game',
+      id: `${payload.platformId}/${payload.gameId}`,
+      attributes: {
+        length: payload.gameDuration * 1000
+      }
+    })
 
     return result
   }

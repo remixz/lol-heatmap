@@ -2,18 +2,61 @@ import Ember from 'ember';
 import FileSaver from 'npm:filesaver.js'
 import url from 'npm:url'
 
+function msToTime (s) {
+  function addZ (n) {
+    return (n < 10 ? '0' : '') + n;
+  }
+
+  var ms = s % 1000;
+  s = (s - ms) / 1000;
+  var secs = s % 60;
+  s = (s - secs) / 60;
+  var mins = s % 60;
+
+  return addZ(mins) + ':' + addZ(secs)
+}
+
 export default Ember.Controller.extend({
   queryParams: ['match'],
   match: null,
   selectedIdentities: [],
+  selectedRange: [0],
   isMapping: false,
+
   _updatedEvents: null, // dummy prop to trigger whenever updated events change
 
-  mappedEvents: Ember.computed('_updatedEvents', function () {
+  gameLength: Ember.computed('model', function () {
+    let length = this.get('model.identities').objectAt(0).get('team.game.length')
+
+    return length
+  }),
+  gameLengthStart: Ember.computed('gameLength', function () {
+    let length = this.get('gameLength')
+
+    return [0, length]
+  }),
+  formattedLengths: Ember.computed('selectedRange', function () {
+    let selectedRange = this.get('selectedRange')
+
+    if (!selectedRange[1]) selectedRange[1] = this.get('gameLength')
+    return [msToTime(selectedRange[0]), msToTime(selectedRange[1])]
+  }),
+  mappedEvents: Ember.computed('_updatedEvents', 'selectedRange', function () {
     let identities = this.get('selectedIdentities')
+    let isMapping = this.get('isMapping')
 
     let events = identities.getEach('events')
     let results = [].concat(...events.map(ev => ev.filterBy('mapped', true)))
+
+    if (!isMapping) {
+      let selectedRange = this.get('selectedRange')
+
+      if (!selectedRange[1]) selectedRange[1] = this.get('gameLength')
+      results = results.filter(ev => {
+        let timestamp = ev.get('timestamp')
+        return timestamp >= selectedRange[0] && timestamp <= selectedRange[1]
+      })
+    }
 
     return results
   }),
@@ -25,7 +68,6 @@ export default Ember.Controller.extend({
 
     return results.sortBy('timestamp')
   }),
-
 
   actions: {
     uploadJson (files) {
@@ -70,6 +112,10 @@ export default Ember.Controller.extend({
       if (this.get('unmappedEvents').length === 0) {
         this.set('isMapping', false)
       }
+    },
+
+    setRangeValue (val) {
+      this.set('selectedRange', val)
     },
 
     updateEvents () {

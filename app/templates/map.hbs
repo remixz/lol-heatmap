@@ -10,6 +10,13 @@
       <button {{action "downloadJson"}}> Export heatmap data </button>
     </div>
     <br />
+
+    {{#unless isMapping}}
+      <p> Showing wards from {{formattedLengths.[0]}} to {{formattedLengths.[1]}}: </p>
+      {{range-slider start=gameLengthStart min=0 max=gameLength step=1000 on-slide=(action "setRangeValue")}}
+      <br />
+    {{/unless}}
+    
     {{ember-selectize
       multiple=true
       content=model.identities
